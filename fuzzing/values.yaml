@@ -12,7 +12,8 @@ initContainer:
   # For Minikube: "Never" prevents pulling from remote registry (use local image only)
   # For production with registry: use "IfNotPresent" or "Always"
   pullPolicy: Never
-  tag: "latest"
+  # Tag is auto-updated by build_init_container.sh script with git commit hash
+  tag: "429c88a" # initContainer tag
 
 service:
   type: ClusterIP
