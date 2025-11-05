@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "fuzzing.fullname" . }}
+  name: {{ include "homelab.fullname" . }}
   labels:
-    {{- include "fuzzing.labels" . | nindent 4 }}
+    {{- include "homelab.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
   ports:
@@ -12,4 +12,4 @@ spec:
       protocol: TCP
       name: http
   selector:
-    {{- include "fuzzing.selectorLabels" . | nindent 4 }}
+    {{- include "homelab.selectorLabels" . | nindent 4 }}

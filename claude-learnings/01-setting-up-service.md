@@ -57,23 +57,23 @@
 > New thing! I want to create a set of helm resources from scratch for a
  webapp.
  Can you start by creating a directory in the project root for this 
- project? Let's call it fuzzing. It'll be the name of the project and 
+ project? Let's call it homelab. It'll be the name of the project and 
  of the helm chart 
 
-⏺ Bash(mkdir /Users/javi.manzano/Developer/gitops/fuzzing)
+⏺ Bash(mkdir /Users/javi.manzano/Developer/gitops/homelab)
   ⎿ (No content)
 
-⏺ Created the fuzzing directory at
-  /Users/javi.manzano/Developer/gitops/fuzzing
+⏺ Created the homelab directory at
+  /Users/javi.manzano/Developer/gitops/homelab
 
 > Nice, can you now create a helm chart? I don't really know what we 
   need to include in it, so I'll have to rely on you.
   Ideally, this will be a simple application with a web service. 
 
-⏺ Created a complete Helm chart structure for your fuzzing
+⏺ Created a complete Helm chart structure for your homelab
   application:
 
-  fuzzing/
+  homelab/
   ├── Chart.yaml              # Chart metadata
   ├── values.yaml             # Default configuration
   └── templates/
@@ -89,16 +89,16 @@
   - Health checks (liveness/readiness probes)
 
   To install it:
-  helm install fuzzing ./fuzzing
+  helm install homelab ./homelab
 
   Or to test the templates:
-  helm template fuzzing ./fuzzing
+  helm template homelab ./homelab
 
 > Great! what changes can you make so the webserver will just say 
   "hello world" for now? 
 
-⏺ Update(fuzzing/templates/deployment.yaml)
-  ⎿ Updated fuzzing/templates/deployment.yaml with 8 additions    
+⏺ Update(homelab/templates/deployment.yaml)
+  ⎿ Updated homelab/templates/deployment.yaml with 8 additions    
        34                port: http
        35            resources:
        36              {{- toYaml .Values.resources | nindent 12 }}
@@ -109,7 +109,7 @@
        41 +        volumes:
        42 +        - name: html-content
        43 +          configMap:
-       44 +            name: {{ include "fuzzing.fullname" . }}
+       44 +            name: {{ include "homelab.fullname" . }}
 
 ⏺ Done! I've:
   1. Created a ConfigMap with a simple HTML page displaying "Hello
@@ -133,9 +133,9 @@ can you guide me through steps 2 and 3?
 
   You can create the app using the ArgoCD CLI:
 
-  argocd app create fuzzing \
+  argocd app create homelab \
     --repo <YOUR_GIT_REPO_URL> \
-    --path fuzzing \
+    --path homelab \
     --dest-server https://kubernetes.default.svc \
     --dest-namespace default
 
@@ -148,14 +148,14 @@ can you guide me through steps 2 and 3?
   apiVersion: argoproj.io/v1alpha1
   kind: Application
   metadata:
-    name: fuzzing
+    name: homelab
     namespace: argocd
   spec:
     project: default
     source:
       repoURL: <YOUR_GIT_REPO_URL>
       targetRevision: HEAD
-      path: fuzzing
+      path: homelab
     destination:
       server: https://kubernetes.default.svc
       namespace: default
@@ -169,22 +169,22 @@ can you guide me through steps 2 and 3?
 
   If you didn't set automated sync, manually sync with:
 
-  argocd app sync fuzzing
+  argocd app sync homelab
 
   Or if you want to sync and watch the progress:
 
-  argocd app sync fuzzing --prune
+  argocd app sync homelab --prune
 
   You can also check the status:
 
-  argocd app get fuzzing
+  argocd app get homelab
 
   Would you like me to help with step 1 (committing and pushing) as
   well, or do you have the git repo URL ready?
 
 > Perfect, all done.
 
-I know I can run `kubectl port-forward svc/fuzzing -n default 8081:80`
+I know I can run `kubectl port-forward svc/homelab -n default 8081:80`
  to be able to access the web ui in localhost:8081.
 
 Are there any other ways to do this? 
@@ -198,7 +198,7 @@ Are there any other ways to do this?
     port: 80
   Then access via http://<node-ip>:<node-port>. Get the node port
   with:
-  kubectl get svc fuzzing -n default
+  kubectl get svc homelab -n default
 
   2. LoadBalancer Service
   service:
@@ -213,13 +213,12 @@ Are there any other ways to do this?
   nginx-ingress).
 
   4. Minikube Service (if using minikube)
-  minikube service fuzzing -n default
+  minikube service homelab -n default
   This automatically opens the service in your browser.
 
   5. kubectl proxy
   kubectl proxy
-  Then access via: http://localhost:8001/api/v1/namespaces/default/ser
-  vices/fuzzing:80/proxy/
+  Then access via: http://localhost:8001/api/v1/namespaces/default/services/homelab:80/proxy/
 
   Port-forward is the simplest for local development. For production,
   Ingress is typically the best option.

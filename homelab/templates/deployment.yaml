@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "fuzzing.fullname" . }}
+  name: {{ include "homelab.fullname" . }}
   labels:
-    {{- include "fuzzing.labels" . | nindent 4 }}
+    {{- include "homelab.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "fuzzing.selectorLabels" . | nindent 6 }}
+      {{- include "homelab.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       labels:
-        {{- include "fuzzing.selectorLabels" . | nindent 8 }}
+        {{- include "homelab.selectorLabels" . | nindent 8 }}
     spec:
       initContainers:
       - name: blog-generator

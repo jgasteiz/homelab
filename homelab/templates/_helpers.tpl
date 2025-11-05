@@ -1,14 +1,14 @@
 {{/*
 Expand the name of the chart.
 */}}
-{{- define "fuzzing.name" -}}
+{{- define "homelab.name" -}}
 {{- default .Chart.Name .Values.nameOverride | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Create a default fully qualified app name.
 */}}
-{{- define "fuzzing.fullname" -}}
+{{- define "homelab.fullname" -}}
 {{- if .Values.fullnameOverride }}
 {{- .Values.fullnameOverride | trunc 63 | trimSuffix "-" }}
 {{- else }}
@@ -24,16 +24,16 @@ Create a default fully qualified app name.
 {{/*
 Create chart name and version as used by the chart label.
 */}}
-{{- define "fuzzing.chart" -}}
+{{- define "homelab.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" }}
 {{- end }}
 
 {{/*
 Common labels
 */}}
-{{- define "fuzzing.labels" -}}
-helm.sh/chart: {{ include "fuzzing.chart" . }}
-{{ include "fuzzing.selectorLabels" . }}
+{{- define "homelab.labels" -}}
+helm.sh/chart: {{ include "homelab.chart" . }}
+{{ include "homelab.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}
@@ -43,7 +43,7 @@ app.kubernetes.io/managed-by: {{ .Release.Service }}
 {{/*
 Selector labels
 */}}
-{{- define "fuzzing.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "fuzzing.name" . }}
+{{- define "homelab.selectorLabels" -}}
+app.kubernetes.io/name: {{ include "homelab.name" . }}
 app.kubernetes.io/instance: {{ .Release.Name }}
 {{- end }}
